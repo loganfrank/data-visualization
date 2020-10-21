@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Logan Frank - Lab 3</title>
+
+        <!-- scripts to import -->
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+        <!-- CSS styling -->
+        <style type="text/css">
+        #map_svg{
+            margin-top: 10px;
+        }
+        #table_svg{
+            margin-top: 10px;
+        }
+        #bar_svg{
+            margin-top: 10px;
+        }
+        #pie_svg{
+            margin-top: 10px;
+        }
+        #pack_svg{
+            margin-top: 10px;
+        }
+        </style>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <!-- First row -->
+            <div class="row">
+                <!-- Column and div for U.S. map -->
+                <div class="col-md-7">
+                    <div id="map_svg"></div>
+                </div>
+
+                <!-- Column and div for table of states -->
+                <div class="col-md-5">
+                    <div id="table_svg"></div>
+                </div>
+            </div>
+            
+            <br>
+
+            <!-- Second row -->
+            <div class="row">
+                <!-- Column and div for bar chart -->
+                <div class="col-md-4">
+                    <div id="bar_svg"></div>
+                </div>
+
+                <!-- Column and div for pie chart -->
+                <div class="col-md-4">
+                    <div id="pie_svg"></div>
+                </div>
+
+                <!-- Column and div for circle packing chart -->
+                <div class="col-md-4">
+                    <div id="pack_svg"></div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="preprocess.js"></script>
+        <script type="text/javascript" src="map.js"></script>
+        <script type="text/javascript" src="table.js"></script>
+        <script type="text/javascript" src="bar.js"></script>
+        <script type="text/javascript" src="pie.js"></script>
+        <script type="text/javascript" src="pack.js"></script>
+    </body>
+</html>
