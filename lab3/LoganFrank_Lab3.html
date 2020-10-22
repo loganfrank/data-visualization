@@ -12,21 +12,70 @@
         
         <!-- CSS styling -->
         <style type="text/css">
+
+        /* map related css */
         #map_svg{
             margin-top: 10px;
         }
-        #table_svg{
-            margin-top: 10px;
+        path {
+            fill: #ddd;
+            stroke: #aaa;
         }
+        path.hover {
+            fill: orange;
+        }
+
+        /* table related css */
+        #table_svg{
+            margin-top: 50px;
+            width: 350px;
+            height: 400px;
+            overflow: auto;
+        }
+        #table_svg th{
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #006622;
+        }
+        #table_svg th, #table_svg td{
+            border: 1px solid #ddd;
+            padding: 2px;
+        }
+        #table_svg table{
+            text-align: center;
+            border-collapse: collapse;
+            border-spacing: 0;
+
+        }
+        #table_svg td:nth-child(1) {
+            width: 200px;
+        }
+        #table_svg td:nth-child(2) {
+            width: 125px;
+        }
+        #table_svg tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        #table_svg tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* bar related css */
         #bar_svg{
             margin-top: 10px;
         }
+
+        /* pie related css */
         #pie_svg{
             margin-top: 10px;
         }
+
+        /* pack related css */
         #pack_svg{
             margin-top: 10px;
         }
+
+
         </style>
     </head>
 
@@ -66,12 +115,13 @@
             </div>
             <br>
 
+            <script type="text/javascript" src="preprocess.js"></script>
             <script type="text/javascript" src="map.js"></script>
             <script type="text/javascript" src="table.js"></script>
             <script type="text/javascript" src="bar.js"></script>
             <script type="text/javascript" src="pie.js"></script>
             <script type="text/javascript" src="pack.js"></script>
-            <script type="text/javascript" src="preprocess.js"></script>
+            
         </div>
         
         

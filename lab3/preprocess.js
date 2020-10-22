@@ -2,19 +2,33 @@
 d3.csv('./data/filtered-data.csv', load_data)
 
 function load_data(error, dataset) {
+    //console.log(dataset)
+
     // parse state normalized totals into a new dict
-    // also parse the state month data into a new dict
     state_to_cases = {};
-    state_month_data = {};
+    state_to_normalized_cases = {};
+    state_cases_data = [];
+    state_cases_data_normalized = [];
     for(var i = 0; i < dataset.length; i++) {
-        // normalized totals
         var state = dataset[i]['state'];
-        var total = parseFloat(dataset[i]['normalized total cases']);
+        var total = parseInt(dataset[i]['total cases']);
+        var normalized_total = parseFloat(dataset[i]['normalized total cases']);
         if (!(state in state_to_cases)) {
             state_to_cases[state] = total;
+            state_to_normalized_cases[state] = normalized_total;
         }
+    }
+    for(const [key, value] of Object.entries(state_to_cases)) {
+        state_cases_data.push([key, value])
+    }
+    for(const [key, value] of Object.entries(state_to_normalized_cases)) {
+        state_cases_data_normalized.push([key, value])
+    }
 
-        // month data
+    // parse the state month data into a new dict
+    state_month_data = {};
+    for(var i = 0; i < dataset.length; i++) {
+        var state = dataset[i]['state'];
         var month = dataset[i]['date'];
         var cases = parseInt(dataset[i]['monthly cases']);
         if (!(state in state_month_data)) {
@@ -24,13 +38,14 @@ function load_data(error, dataset) {
     }
 
     // log the datasets
-    console.log(state_to_cases);
-    console.log(state_month_data);
+    console.log(state_cases_data);
+    console.log(state_cases_data_normalized);
+    console.log(state_month_data)
 
     // call functions to create the views
-    table(state_to_cases, state_month_data);
-    map(state_to_cases, state_month_data);
-    bar(state_to_cases, state_month_data);
-    pie(state_to_cases, state_month_data);
-    pack(state_to_cases, state_month_data);
+    table(state_cases_data, state_cases_data_normalized, state_month_data);
+    map(state_cases_data, state_cases_data_normalized, state_month_data);
+    bar(state_cases_data, state_cases_data_normalized, state_month_data);
+    pie(state_cases_data, state_cases_data_normalized, state_month_data);
+    pack(state_cases_data, state_cases_data_normalized, state_month_data);
 }
