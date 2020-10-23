@@ -6,7 +6,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
     
     console.log(hierarchical_data);
 
-    var diameter = 500;
+    var diameter = 400;
 
     var bubble = d3.pack(hierarchical_data)
         .size([diameter, diameter])

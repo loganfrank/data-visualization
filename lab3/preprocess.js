@@ -21,6 +21,19 @@ function load_data(error, dataset) {
         state_cases_data.push([key, value])
     }
 
+    var month_int_to_string = {
+        '1'  : 'January',
+        '2'  : 'February',
+        '3'  : 'March',
+        '4'  : 'April',
+        '5'  : 'May',
+        '6'  : 'June',
+        '7'  : 'July',
+        '8'  : 'August',
+        '9'  : 'September',
+        '10' : 'October'
+    };
+
     // parse the state month data into a new dict
     state_month_data = {};
     for(var i = 0; i < dataset.length; i++) {
@@ -28,14 +41,10 @@ function load_data(error, dataset) {
         var month = dataset[i]['date'];
         var cases = parseInt(dataset[i]['monthly cases']);
 
-        console.log(state);
-        console.log(month);
-        console.log(cases);
-
         if (!(state in state_month_data)) {
             state_month_data[state] = [];
         }
-        state_month_data[state][month] = cases;
+        state_month_data[state].push({'month' : month_int_to_string[month], 'cases' : cases});
     }
 
     // log the datasets
