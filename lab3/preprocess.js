@@ -6,23 +6,19 @@ function load_data(error, dataset) {
 
     // parse state normalized totals into a new dict
     state_to_cases = {};
-    state_to_normalized_cases = {};
     state_cases_data = [];
-    state_cases_data_normalized = [];
+    state_cases_data_normalized = {};
     for(var i = 0; i < dataset.length; i++) {
         var state = dataset[i]['state'];
         var total = parseInt(dataset[i]['total cases']);
         var normalized_total = parseFloat(dataset[i]['normalized total cases']);
         if (!(state in state_to_cases)) {
             state_to_cases[state] = total;
-            state_to_normalized_cases[state] = normalized_total;
+            state_cases_data_normalized[state] = normalized_total;
         }
     }
     for(const [key, value] of Object.entries(state_to_cases)) {
         state_cases_data.push([key, value])
-    }
-    for(const [key, value] of Object.entries(state_to_normalized_cases)) {
-        state_cases_data_normalized.push([key, value])
     }
 
     // parse the state month data into a new dict

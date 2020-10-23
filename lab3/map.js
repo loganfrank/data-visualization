@@ -31,12 +31,14 @@ function create_map(error, us) {
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
             highlight_table_and_pack(state);
+            // select circle and fill
             d3.select(this)
                 .style('fill', 'orange');
         })
         .on('mouseout', function(d) {
             var state = d.properties.NAME10;    
             reset_table_and_pack(state);
+            // select circle and reset
             d3.select(this)
                 .style('fill', '#ddd');
         });
@@ -58,7 +60,40 @@ function create_map(error, us) {
         });
 
     // draw circles over states
-    var circles = svg.selectAll('path');
+    var circles = svg.selectAll('circle')
+        .data(us.features)
+        .enter()
+        .append('circle')
+        .attr('transform', function(d) {
+            var center = geoGenerator.centroid(d);
+            return 'translate (' + center + ')';
+        })
+        .attr('r', function(d) {
+            var state = d.properties.NAME10;
+            var normalized_cases = state_cases_data_normalized[state];
+            var multiplier = 250;
+            normalized_cases = normalized_cases * multiplier;
+            return normalized_cases;
+        })
+        .attr('id', function(d) {
+            return d.properties.NAME10.split(' ').join('_');
+        })
+        .style('fill', '#006622')
+        .style('opacity', '25%')
+        .on('mouseover', function(d) {
+            var state = d.properties.NAME10;
+            highlight_table_and_pack(state);
+            // select path and fill
+            d3.select(this)
+                .style('fill', 'orange');
+        })
+        .on('mouseout', function(d) {
+            var state = d.properties.NAME10;    
+            reset_table_and_pack(state);
+            // select path and reset
+            d3.select(this)
+                .style('fill', '#006622');
+        });
 }
 
 function highlight_table_and_pack(state) {
