@@ -31,14 +31,16 @@ function create_map(error, us) {
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
             highlight_table_and_pack(state);
-            // select circle and fill
+            d3.select('circle#' + state.split(' ').join('_'))
+                .style('fill', 'orange');
             d3.select(this)
                 .style('fill', 'orange');
         })
         .on('mouseout', function(d) {
             var state = d.properties.NAME10;    
             reset_table_and_pack(state);
-            // select circle and reset
+            d3.select('circle#' + state.split(' ').join('_'))
+                .style('fill', '006622');
             d3.select(this)
                 .style('fill', '#ddd');
         });
@@ -50,13 +52,31 @@ function create_map(error, us) {
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'middle')
         .attr('opacity', 0.5)
-        .attr('font-size', '8px')
+        .attr('font-size', '9px')
+        .style('fill', '#000')
+        .style('font-weight', 'bold')
         .text(function(d) {
             return d.properties.STUSPS10;
         })
         .attr('transform', function(d) {
             var center = geoGenerator.centroid(d);
             return 'translate (' + center + ')';
+        })
+        .on('mouseover', function(d) {
+            var state = d.properties.NAME10;
+            highlight_table_and_pack(state);
+            d3.select('path#' + state.split(' ').join('_'))
+                .style('fill', 'orange');
+            d3.select('circle#' + state.split(' ').join('_'))
+                .style('fill', 'orange');
+        })
+        .on('mouseout', function(d) {
+            var state = d.properties.NAME10;    
+            reset_table_and_pack(state);
+            d3.select('circle#' + state.split(' ').join('_'))
+                .style('fill', '006622');
+            d3.select('path#' + state.split(' ').join('_'))
+                .style('fill', '#ddd');
         });
 
     // draw circles over states
@@ -79,18 +99,20 @@ function create_map(error, us) {
             return d.properties.NAME10.split(' ').join('_');
         })
         .style('fill', '#006622')
-        .style('opacity', '25%')
+        .style('opacity', '50%')
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
             highlight_table_and_pack(state);
-            // select path and fill
+            d3.select('path#' + state.split(' ').join('_'))
+                .style('fill', 'orange');
             d3.select(this)
                 .style('fill', 'orange');
         })
         .on('mouseout', function(d) {
             var state = d.properties.NAME10;    
             reset_table_and_pack(state);
-            // select path and reset
+            d3.select('path#' + state.split(' ').join('_'))
+                .style('fill', '#ddd');
             d3.select(this)
                 .style('fill', '#006622');
         });
