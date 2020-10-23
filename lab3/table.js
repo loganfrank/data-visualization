@@ -16,15 +16,20 @@ function table(state_cases_data, state_cases_data_normalized, state_month_data) 
             var original_color = $(this).css('background-color');
             return rgb_to_hex(original_color);
         })
+        .attr('id', function(d) {
+            var state = d[0];
+            state = state.split(' ').join('_');
+            return state;
+        })
         .on('mouseover', function(d) {
             var state = d[0];
-            highlight(state);
+            highlight_map_and_pack(state);
             d3.select(this)
                 .style('background-color', 'orange');
         })
         .on('mouseout', function(d) {
             var state = d[0];
-            reset(state);
+            reset_map_and_pack(state);
             d3.select(this)
                 .style('background-color', function() {
                     return d3.select(this).attr('original-color');
@@ -32,7 +37,7 @@ function table(state_cases_data, state_cases_data_normalized, state_month_data) 
         })
         .on('click', function(d) {
             var state = d[0];
-            update(state);
+            update_bar_and_pie(state);
         });
     cells = rows.selectAll('td')
         .data(function(d) {
@@ -56,17 +61,33 @@ function rgb_to_hex(colorval) {
     return '#' + parts.join('');
 }
 
-function highlight(state) {
+function highlight_map_and_pack(state) {
     highlight_map(state);
     highlight_pack(state);
 }
 
-function reset(state) {
+function highlight_table(state){
+    state = state.split(' ').join('_');
+    d3.select('tbody')
+        .select('#' + state)
+        .style('background-color', 'orange');
+}
+
+function reset_table(state) {
+    state = state.split(' ').join('_');
+    d3.select('tbody')
+        .select('tr#' + state)
+        .style('background-color', function() {
+            return d3.select(this).attr('original-color');
+        });
+}
+
+function reset_map_and_pack(state) {
     reset_map(state);
     reset_pack(state);
 }
 
-function update(state) {
+function update_bar_and_pie(state) {
     update_bar(state);
     update_pie(state);
 }
