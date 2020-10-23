@@ -6,7 +6,8 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
     var x = d3.scaleBand()
         .range([0, width])
         .padding(0.065);
-    var y = d3.scaleLinear().range([height, 0]);
+    var y = d3.scaleLinear()
+        .range([0, height]);
 
     bar_svg = d3.select('#bar_svg')
         .append('svg')
@@ -15,7 +16,13 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    x.domain()
+    x.domain(state_month_data.map(function(d) {
+        console.log(d);
+    }));
+    y.domain([0, 100]);
+
+    var x_axis = d3.axisBottom().scale(x);
+    var y_axis = d3.axisLeft().scale(y);
 }
 
 function update_bar(state) {
