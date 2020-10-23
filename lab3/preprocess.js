@@ -27,8 +27,13 @@ function load_data(error, dataset) {
         var state = dataset[i]['state'];
         var month = dataset[i]['date'];
         var cases = parseInt(dataset[i]['monthly cases']);
+
+        console.log(state);
+        console.log(month);
+        console.log(cases);
+
         if (!(state in state_month_data)) {
-            state_month_data[state] = {};
+            state_month_data[state] = [];
         }
         state_month_data[state][month] = cases;
     }

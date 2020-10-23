@@ -36,6 +36,8 @@ function table(state_cases_data, state_cases_data_normalized, state_month_data) 
                 });
         })
         .on('click', function(d) {
+            console.log('click table row')
+            console.log(d);
             var state = d[0];
             update_bar_and_pie(state);
         });

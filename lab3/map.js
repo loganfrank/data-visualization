@@ -28,6 +28,11 @@ function create_map(error, us) {
         .attr('id', function(d) {
             return d.properties.NAME10.split(' ').join('_');
         })
+        .on('click', function(d) {
+            // TODO
+            console.log('click map path')
+            console.log(d);
+        })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
             highlight_table_and_pack(state);
@@ -62,18 +67,23 @@ function create_map(error, us) {
             var center = geoGenerator.centroid(d);
             return 'translate (' + center + ')';
         })
+        .on('click', function(d) {
+            // TODO
+            console.log('click map text')
+            console.log(d);
+        })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
             highlight_table_and_pack(state);
             d3.select('path#' + state.split(' ').join('_'))
                 .style('fill', 'orange');
-            d3.select('circle#' + state.split(' ').join('_'))
+            d3.select('#map_svg').select('circle#' + state.split(' ').join('_'))
                 .style('fill', 'orange');
         })
         .on('mouseout', function(d) {
             var state = d.properties.NAME10;    
             reset_table_and_pack(state);
-            d3.select('circle#' + state.split(' ').join('_'))
+            d3.select('#map_svg').select('circle#' + state.split(' ').join('_'))
                 .style('fill', '006622');
             d3.select('path#' + state.split(' ').join('_'))
                 .style('fill', '#ddd');
@@ -100,6 +110,11 @@ function create_map(error, us) {
         })
         .style('fill', '#006622')
         .style('opacity', '50%')
+        .on('click', function(d) {
+            // TODO
+            console.log(d);
+            console.log('click map circles')
+        })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
             highlight_table_and_pack(state);
@@ -126,6 +141,9 @@ function highlight_table_and_pack(state) {
 function highlight_map(state) {
     state = state.split(' ').join('_');
     d3.select('path#' + state).style('fill', 'orange');
+    d3.select('#map_svg')
+        .select('circle#' + state.split(' ').join('_'))
+        .style('fill', 'orange');
 }
 
 function reset_table_and_pack(state) {
@@ -136,4 +154,7 @@ function reset_table_and_pack(state) {
 function reset_map(state) {
     state = state.split(' ').join('_');
     d3.select('path#' + state).style('fill', '#ddd');
+    d3.select('#map_svg')
+        .select('circle#' + state.split(' ').join('_'))
+        .style('fill', '#006622');
 }
