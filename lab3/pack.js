@@ -43,7 +43,6 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
 
     node.append('title')
         .text(function(d) {
-            console.log(d);
             return d.data['state'] + ': ' + d.data['total cases'];
         });
 

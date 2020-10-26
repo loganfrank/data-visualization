@@ -16,13 +16,13 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    x.domain(state_month_data.map(function(d) {
-        console.log(d);
-    }));
-    y.domain([0, 100]);
+    //x.domain(state_month_data.map(function(d) {
+    //    console.log(d);
+    //}));
+    //y.domain([0, 100]);
 
-    var x_axis = d3.axisBottom().scale(x);
-    var y_axis = d3.axisLeft().scale(y);
+    //var x_axis = d3.axisBottom().scale(x);
+    //var y_axis = d3.axisLeft().scale(y);
 }
 
 function update_bar(state) {
