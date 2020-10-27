@@ -1,5 +1,7 @@
+var state_month_data;
 
 function map(state_cases_data, state_cases_data_normalized, state_month_data) {
+    state_month_data = state_cases_data
     d3.json('data/usa_mainland.json', create_map);
 }
 
@@ -29,9 +31,10 @@ function create_map(error, us) {
             return d.properties.NAME10.split(' ').join('_');
         })
         .on('click', function(d) {
-            // TODO
-            console.log('click map path')
             console.log(d);
+            var state = d.properties.NAME10;
+            console.log(state);
+            update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
@@ -68,9 +71,10 @@ function create_map(error, us) {
             return 'translate (' + center + ')';
         })
         .on('click', function(d) {
-            // TODO
-            console.log('click map text')
             console.log(d);
+            var state = d.properties.NAME10;
+            console.log(state);
+            update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
@@ -111,9 +115,10 @@ function create_map(error, us) {
         .style('fill', '#006622')
         .style('opacity', '50%')
         .on('click', function(d) {
-            // TODO
             console.log(d);
-            console.log('click map circles')
+            var state = d.properties.NAME10;
+            console.log(state);
+            update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;

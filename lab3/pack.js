@@ -6,24 +6,24 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
     
     console.log(hierarchical_data);
 
-    var diameter = 400;
+    var diameter = 500;
 
     var bubble = d3.pack(hierarchical_data)
         .size([diameter, diameter])
         .padding(1.5);
     
-    pack_svg = d3.select('#pack_svg')
-        .append('svg')
-        .attr('width', diameter + 200)
-        .attr('height', diameter)
-        .attr('class', 'bubble');
-
     d3.select('#pack_svg')
         .append('text')
         .attr('id', 'cases_text')
         .text('No State Selected')
         .style('fill', 'black');
 
+    pack_svg = d3.select('#pack_svg')
+        .append('svg')
+        .attr('width', diameter + 200)
+        .attr('height', diameter)
+        .attr('class', 'bubble');
+    
     var nodes = d3.hierarchy(hierarchical_data)
         .sum(function(d) {
             return d['total cases'];
@@ -58,9 +58,11 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
             return d.data['total cases'];
         })
         .on('click', function(d) {
-            // TODO
+            console.log('pack text')
+            var state = d.data['state'];
             console.log(d);
-            console.log('click pack circle');
+            console.log(state);
+            update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
             var state = d.data['state'];
@@ -68,7 +70,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
             d3.select(this)
                 .style('fill', 'orange');
             d3.select('#cases_text')
-                .text('Total Cases: ' + d.data['total cases']);
+                .text('Total Cases for ' + d.data['state'] + ': ' + d.data['total cases']);
         })
         .on('mouseout', function(d) {
             var state = d.data['state'];   
@@ -90,9 +92,11 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
         })
         .attr('fill', 'white')
         .on('click', function(d) {
-            // TODO
+            console.log('pack text')
+            var state = d.data['state'];
             console.log(d);
-            console.log('click pack text')
+            console.log(state);
+            update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
             var state = d.data['state']
@@ -125,6 +129,7 @@ function highlight_map_and_table(state) {
 }
 
 function highlight_pack(state) {
+    var normal_state = state;
     state = state.split(' ').join('_');
     d3.select('#pack_svg')
         .select('circle#' + state)
@@ -132,7 +137,7 @@ function highlight_pack(state) {
     d3.select('#pack_svg')
         .select('#cases_text')
         .text(function() {
-            return  'Total Cases: ' + d3.select('#pack_svg')
+            return  'Total Cases for ' + normal_state + ': ' + d3.select('#pack_svg')
                 .select('circle#' + state)
                 .attr('cases');
         });

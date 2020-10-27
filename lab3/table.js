@@ -36,10 +36,8 @@ function table(state_cases_data, state_cases_data_normalized, state_month_data) 
                 });
         })
         .on('click', function(d) {
-            console.log('click table row')
-            console.log(d);
             var state = d[0];
-            update_bar_and_pie(state);
+            update_bar_and_pie(state, state_month_data);
         });
     cells = rows.selectAll('td')
         .data(function(d) {
@@ -89,7 +87,7 @@ function reset_map_and_pack(state) {
     reset_pack(state);
 }
 
-function update_bar_and_pie(state) {
-    update_bar(state);
-    update_pie(state);
+function update_bar_and_pie(state, state_month_data) {
+    update_bar(state, state_month_data);
+    update_pie(state, state_month_data);
 }
