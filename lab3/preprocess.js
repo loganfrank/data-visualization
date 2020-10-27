@@ -57,6 +57,6 @@ function load_data(error, dataset) {
     map(state_cases_data, state_cases_data_normalized, state_month_data);
     pack(state_cases_data, state_cases_data_normalized, state_month_data);
     pie(state_cases_data, state_cases_data_normalized, state_month_data);
-    // bar(state_cases_data, state_cases_data_normalized, state_month_data);
+    bar(state_cases_data, state_cases_data_normalized, state_month_data);
     
 }

@@ -17,10 +17,12 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
         .attr('id', 'cases_text')
         .text('No State Selected')
         .style('fill', 'black');
+    
+    d3.select('#pack_svg').append('br');
 
     pack_svg = d3.select('#pack_svg')
         .append('svg')
-        .attr('width', diameter + 200)
+        .attr('width', diameter)
         .attr('height', diameter)
         .attr('class', 'bubble');
     

@@ -14,6 +14,14 @@ function pie(state_cases_data, state_cases_data_normalized, state_month_data) {
     }
     var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+    d3.select('#pie_svg')
+        .append('text')
+        .attr('id', 'state_text')
+        .text('Ohio')
+        .style('fill', 'black');
+    
+    d3.select('#pie_svg').append('br');
+
     pie_svg = d3.select('#pie_svg')
         .append('svg')
         .attr('width', 1000)
@@ -99,6 +107,8 @@ function pie(state_cases_data, state_cases_data_normalized, state_month_data) {
 
 function update_pie(state, state_month_data) {
     d3.select('#pie_svg').select('svg').remove();
+    d3.select('#pie_svg').select('#state_text').remove();
+    d3.select('#pie_svg').select('br').remove();
 
     var state_data = state_month_data[state];
 
@@ -116,6 +126,14 @@ function update_pie(state, state_month_data) {
         }
     }
     var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    d3.select('#pie_svg')
+        .append('text')
+        .attr('id', 'state_text')
+        .text(state)
+        .style('fill', 'black');
+    
+    d3.select('#pie_svg').append('br');
 
     pie_svg = d3.select('#pie_svg')
         .append('svg')
