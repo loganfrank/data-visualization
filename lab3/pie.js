@@ -33,8 +33,6 @@ function pie(state_cases_data, state_cases_data_normalized, state_month_data) {
             return d['cases'];
         })
         .sort(function(a, b) {
-            console.log(a);
-            console.log(b);
             return b['cases'] - a['cases'];
         });
 
@@ -44,6 +42,7 @@ function pie(state_cases_data, state_cases_data_normalized, state_month_data) {
         .innerRadius(50)
         .outerRadius(120);
 
+    // construct the pie
     d3.select('#pie_svg')
         .select('svg')
         .select('g')
@@ -56,6 +55,7 @@ function pie(state_cases_data, state_cases_data_normalized, state_month_data) {
         })
         .attr('d', arcGenerator);
         
+    // add text over the pie chart sections
     d3.select('#pie_svg')
         .select('svg')
         .select('g')
@@ -64,9 +64,7 @@ function pie(state_cases_data, state_cases_data_normalized, state_month_data) {
         .enter()
         .append('text')
         .each(function(d) {
-            console.log(d);
             var centroid = arcGenerator.centroid(d);
-            console.log(centroid);
             d3.select(this)
                 .text(d.data['cases'])
                 .attr('font-size', '10px');
@@ -112,8 +110,6 @@ function update_pie(state, state_month_data) {
 
     var state_data = state_month_data[state];
 
-    console.log(state_data);
-
     // remove 0 cases months
     var i = 0;
     while (i < state_data.length) {
@@ -146,8 +142,6 @@ function update_pie(state, state_month_data) {
             return d['cases'];
         })
         .sort(function(a, b) {
-            console.log(a);
-            console.log(b);
             return b['cases'] - a['cases'];
         });
 
@@ -177,9 +171,7 @@ function update_pie(state, state_month_data) {
         .enter()
         .append('text')
         .each(function(d) {
-            console.log(d);
             var centroid = arcGenerator.centroid(d);
-            console.log(centroid);
             d3.select(this)
                 .text(d.data['cases'])
                 .attr('font-size', '10px');

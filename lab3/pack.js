@@ -4,8 +4,6 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
         hierarchical_data['children'].push({'state' : item[0], 'total cases' : item[1]});
     }
     
-    console.log(hierarchical_data);
-
     var diameter = 500;
 
     var bubble = d3.pack(hierarchical_data)
@@ -48,6 +46,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
             return d.data['state'] + ': ' + d.data['total cases'];
         });
 
+    // create the circles in the packing chart
     node.append('circle')
         .attr('r', function(d) {
             return d.r;
@@ -60,10 +59,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
             return d.data['total cases'];
         })
         .on('click', function(d) {
-            console.log('pack text')
             var state = d.data['state'];
-            console.log(d);
-            console.log(state);
             update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
@@ -83,6 +79,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
                 .text('No State Selected');
         });
 
+    // put text over the circles
     node.append('text')
         .attr('dy', '.2em')
         .style('text-anchor', 'middle')
@@ -94,10 +91,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
         })
         .attr('fill', 'white')
         .on('click', function(d) {
-            console.log('pack text')
             var state = d.data['state'];
-            console.log(d);
-            console.log(state);
             update_bar_and_pie(state, state_month_data);
         })
         .on('mouseover', function(d) {
@@ -108,7 +102,7 @@ function pack(state_cases_data, state_cases_data_normalized, state_month_data) {
                 .select('circle#' + state)
                 .style('fill', 'orange');
             d3.select('#cases_text')
-                .text('Total Cases: ' + d.data['total cases']);
+                .text('Total Cases for ' + d.data['state'] + ': ' + d.data['total cases']);
         })
         .on('mouseout', function(d) {
             var state = d.data['state']

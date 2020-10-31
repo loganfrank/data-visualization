@@ -2,7 +2,8 @@
 d3.csv('./data/filtered-data.csv', load_data)
 
 function load_data(error, dataset) {
-    //console.log(dataset)
+
+    // NOTE: I used the examples from Professor Shen and Ziwei heavily for completing this lab
 
     // parse state normalized totals into a new dict
     state_to_cases = {};

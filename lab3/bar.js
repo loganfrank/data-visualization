@@ -1,3 +1,5 @@
+// created with help from: https://www.tutorialsteacher.com/d3js/create-bar-chart-using-d3js
+
 function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
     var state_data = state_month_data['Ohio'];
 
@@ -48,6 +50,7 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
             return d;
         }).ticks(10));
 
+    // construct the bars in the bar chart
     g.selectAll('#bar')
         .data(state_data)
         .enter()
@@ -67,6 +70,7 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
             return color(i);
         });
 
+    // add title
     svg.append('text')
         .attr('transform', 'translate(100, 0)')
         .attr('x', 50)
@@ -74,6 +78,7 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
         .attr('font-size', '18px')
         .text('Ohio Monthly Cases');
     
+    // add x axis label
     g.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .append('text')
@@ -82,6 +87,7 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
         .attr('text-anchor', 'end')
         .text('Month');
 
+    // add y axis label
     g.append('g')
         .append('text')
         .attr('transform', 'rotate(-90)')
@@ -90,6 +96,7 @@ function bar(state_cases_data, state_cases_data_normalized, state_month_data) {
         .attr('text-anchor', 'end')
         .text('Number of Cases');
 
+    // put text above the bars
     g.append('g')
         .selectAll('#top_text')
         .data(state_data)
@@ -214,7 +221,6 @@ function update_bar(state, state_month_data) {
             return x(d['month']);
         })
         .attr('y', function(d) {
-            console.log(d);
             return y(d['cases']) - 5;
         })
         .text(function(d) {

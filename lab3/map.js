@@ -1,11 +1,14 @@
-var state_month_data;
+var month_data;
+var cases_data_normalized;
 
 function map(state_cases_data, state_cases_data_normalized, state_month_data) {
-    state_month_data = state_cases_data
+    month_data = state_month_data;
+    cases_data_normalized = state_cases_data_normalized;
     d3.json('data/usa_mainland.json', create_map);
 }
 
 function create_map(error, us) {
+    // create the map svg
     var svg = d3.select('#map_svg')
         .append('svg')
         .attr('width', '600px')
@@ -20,8 +23,7 @@ function create_map(error, us) {
     var geoGenerator = d3.geoPath()
         .projection(projection);
 
-    console.log(us);
-
+    // create all the state paths
     var paths = svg.selectAll('path')
         .data(us.features)
         .enter()
@@ -31,10 +33,8 @@ function create_map(error, us) {
             return d.properties.NAME10.split(' ').join('_');
         })
         .on('click', function(d) {
-            console.log(d);
             var state = d.properties.NAME10;
-            console.log(state);
-            update_bar_and_pie(state, state_month_data);
+            update_bar_and_pie(state, month_data);
         })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
@@ -53,6 +53,7 @@ function create_map(error, us) {
                 .style('fill', '#ddd');
         });
 
+    // put text over the state
     var texts = svg.selectAll('text')
         .data(us.features)
         .enter()
@@ -71,10 +72,8 @@ function create_map(error, us) {
             return 'translate (' + center + ')';
         })
         .on('click', function(d) {
-            console.log(d);
             var state = d.properties.NAME10;
-            console.log(state);
-            update_bar_and_pie(state, state_month_data);
+            update_bar_and_pie(state, month_data);
         })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;
@@ -104,7 +103,7 @@ function create_map(error, us) {
         })
         .attr('r', function(d) {
             var state = d.properties.NAME10;
-            var normalized_cases = state_cases_data_normalized[state];
+            var normalized_cases = cases_data_normalized[state];
             var multiplier = 250;
             normalized_cases = normalized_cases * multiplier;
             return normalized_cases;
@@ -115,10 +114,8 @@ function create_map(error, us) {
         .style('fill', '#006622')
         .style('opacity', '50%')
         .on('click', function(d) {
-            console.log(d);
             var state = d.properties.NAME10;
-            console.log(state);
-            update_bar_and_pie(state, state_month_data);
+            update_bar_and_pie(state, month_data);
         })
         .on('mouseover', function(d) {
             var state = d.properties.NAME10;

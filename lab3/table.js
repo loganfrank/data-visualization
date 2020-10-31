@@ -1,5 +1,8 @@
 function table(state_cases_data, state_cases_data_normalized, state_month_data) {
+    // create the table
     var table = d3.select('#table_svg').append('table');
+
+    // create the table header
     var header = table.append('thead').append('tr');
     header.selectAll('th')
         .data(['State', 'Total Cases'])
@@ -7,6 +10,7 @@ function table(state_cases_data, state_cases_data_normalized, state_month_data) 
         .append('th')
         .text(function(d) { return d; });
 
+    // structure the rows
     var table_body = table.append('tbody');
     rows = table_body.selectAll('tr')
         .data(state_cases_data)
@@ -39,6 +43,8 @@ function table(state_cases_data, state_cases_data_normalized, state_month_data) 
             var state = d[0];
             update_bar_and_pie(state, state_month_data);
         });
+
+    // add the data to the rows
     cells = rows.selectAll('td')
         .data(function(d) {
             return d;
