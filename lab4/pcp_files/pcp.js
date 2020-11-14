@@ -83,6 +83,13 @@ function path(d) {
 }
 
 // Handles a brush event, toggling the display of foreground lines.
-function brush() {
+function brush(p) {
+  // p is the trait
+  var extent = d3.event.selection;
+  var paths = d3.select('.foreground').selectAll('path')
+  console.log(paths);
+  paths.classed('fade', function(d) {
+    return y[p](d[p]) < extent[0] || y[p](d[p]) > extent[1];
+  })
 
 }

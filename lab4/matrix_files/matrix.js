@@ -43,8 +43,13 @@ d3.json("miserables.json", function(miserables) {   // read the json file. You s
   // now let's define the range first. i.e., the final position of character 
   // ***** this is what you should modify for you lab!! 
   var orderByName = d3.range(n).sort(function(a, b) { return d3.ascending(nodes[a].name, nodes[b].name); })  
+
+  // Below was added by me (Logan Frank)
+  var orderByGroup = d3.range(n).sort(function(a, b) {
+    return d3.ascending(nodes[b].group, nodes[a].group);
+  })
                                                  
-  x.domain(orderByName);   // now define the scale domain, that is the character name
+  x.domain(orderByGroup);   // now define the scale domain, that is the character name
                            // so with domain and range defined, you can assign the row/column index by the name 
 
   svg.append("rect")       // now let's append a big svg rectangle as the base of the whole matrix 

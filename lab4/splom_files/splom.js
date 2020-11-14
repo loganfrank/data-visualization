@@ -79,6 +79,8 @@ d3.csv("iris.csv", function(error, flowers) {  // read the flowwer data and run 
       })
       .each(function(d) { y.domain(domainByTrait[d]); d3.select(this).call(yAxis); }); //define the y position scale function for each trait 
 
+  svg.property('value', [])
+
   var cell = svg.selectAll(".cell")  // create a scatterplot matrix, where a cell is a scatterplot 
       .data(cross(traits, traits))  // create a traits x traits list 
     .enter().append("g")
@@ -136,11 +138,28 @@ d3.csv("iris.csv", function(error, flowers) {  // read the flowwer data and run 
 
   // Highlight the selected circles.
   function brush(p) {
+    // determine which plot we are on
+    var x_label = p.x;
+    var y_label = p.y;
 
+    var extent = d3.brushSelection(this);
+    var circles = d3.selectAll('circle')
+
+    if (extent) {
+      circles.classed('extent', function(d) {
+        return x(d[x_label]) < extent[0][0] ||
+          x(d[x_label]) > extent[1][0] || 
+          y(d[y_label]) < extent[0][1] || 
+          y(d[y_label]) > extent[1][1];
+      });
+    }
   }
  
   function brushend() { 
-    
+    svg.selectAll('.extent').classed('extent', false);
+    if (d3.brushSelection(this) !== null) {
+      d3.select(brushCell).call(brush.move, null);
+    }
   }
 });
 
