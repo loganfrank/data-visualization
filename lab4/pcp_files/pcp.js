@@ -35,9 +35,10 @@ d3.csv("iris.csv", function(flowers) {   // after read flowers.csv, do the follo
         .domain(d3.extent(flowers, function(p) { return p[d]; }))  // extend is to calculate the range of the values in each trait, h is the screen height
         .range([h, 0]);
 
-    y[d].brush = d3.brushY()    // define a brush event 
+    y[d].brush = d3.brushY()           // define a brush event 
         .extent([[-8, 16], [8, h]])    //define the brushable area: width wise only near each coordinate axis is brushable 
-        .on("brush", brush);           // but you can brush across almost the entire screen height 
+        .on("brush", brush)            // but you can brush across almost the entire screen height
+        .on('end', brushEnd);          // I added this (Logan Frank)       
  });
 
   // Add foreground lines.
@@ -73,23 +74,52 @@ d3.csv("iris.csv", function(flowers) {   // after read flowers.csv, do the follo
   g.append("svg:g")
       .attr("class", "brush")
       .each(function(d) { 
-        console.log(y[d]);
         d3.select(this).call(y[d].brush); });  // add a D3 brush
 });
 
 // Returns the path for a given data point.
 function path(d) {
-  return line(traits.map(function(p) { return [x(p), y[p](d[p])]; }));
+  return line(traits.map(function(p) { 
+    return [x(p), y[p](d[p])]; 
+  }));
+}
+
+// Dictionary to save extents of each dimension
+var selections = {};
+
+// The below function is used for if the user clicks the axis (i.e., reseting the brush), it should restore some paths
+function brushEnd(p) {
+  if (d3.event.selection === null) {
+    // delete the extents
+    delete selections[p];
+
+    // Restore other paths
+    var paths = d3.select('.foreground').selectAll('path')
+    paths.classed('fade', function(d) {
+      var outside = false;
+      for (const[key, value] of Object.entries(selections)){
+        outside = outside || (y[key](d[key]) < value[0] || y[key](d[key]) > value[1]);
+      }
+      return outside;
+    });
+  }
 }
 
 // Handles a brush event, toggling the display of foreground lines.
 function brush(p) {
-  // p is the trait
-  var extent = d3.event.selection;
+  var s = d3.event.selection;
+  selections[p] = s;
+
+  // Select all of the foreground paths
   var paths = d3.select('.foreground').selectAll('path')
-  console.log(paths);
+
+  // Determine which paths are outside the provided extents
   paths.classed('fade', function(d) {
-    return y[p](d[p]) < extent[0] || y[p](d[p]) > extent[1];
-  })
+    var outside = false;
+    for (const[key, value] of Object.entries(selections)){
+      outside = outside || (y[key](d[key]) < value[0] || y[key](d[key]) > value[1]);
+    }
+    return outside;
+  });
 
 }
