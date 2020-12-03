@@ -1,0 +1,11 @@
+Download the data from the following sources and place in the specified directories
+
+Kaggle Presidential Debate Data:
+- url: https://www.kaggle.com/headsortails/us-election-2020-presidential-debates
+- directory: ./data/kaggle_debate/
+
+Kaggle Voting Data:
+- url: https://www.kaggle.com/unanimad/us-election-2020
+- directory: ./data/kaggle_voting/
+
+
