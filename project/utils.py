@@ -3,11 +3,14 @@ import plotly.express as px
 import plotly.graph_objects as go 
 
 import dash
+import dash.dependencies as dd
 import dash_core_components as dcc
 import dash_html_components as html
 
 import pandas as pd 
 import numpy as np
+from wordcloud import WordCloud
+import tweepy
 
 def table(dataframe):
     """
@@ -64,7 +67,7 @@ def radio(id, options):
         value=options[0]['value']
     )
 
-def slider(id, labels):
+def slider(id, labels, step=1):
     """
     :param id: the identification name for the slider, used for callbacks
     :param labels: array of labels
@@ -73,11 +76,12 @@ def slider(id, labels):
         min=0,
         max=(len(labels) - 1),
         marks={i: label for i, label in enumerate(labels)},
-        value=0
+        value=0,
+        step=step
     )
     return obj
 
-def range_slider(id, labels):
+def range_slider(id, labels, step=1):
     """
     :param id: the identification name for the slider, used for callbacks
     :param labels: array of labels
@@ -86,6 +90,17 @@ def range_slider(id, labels):
         min=0,
         max=(len(labels) - 1),
         marks={i: label for i, label in enumerate(labels)},
-        value=[0, (len(labels) - 1)]
+        value=[0, (len(labels) - 1)],
+        step=step
     )
     return obj
+
+def plot_wordcloud(data):
+    """
+    Helper function for creating WordCloud, taken from https://stackoverflow.com/questions/58907867/how-to-show-wordcloud-image-on-dash-web-application
+    """
+    # d = {a: x for a, x in data.values}
+    wc = WordCloud(background_color='white', width=480, height=360)
+    wc.fit_words(data)
+    return wc.to_image()
+
