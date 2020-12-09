@@ -51,14 +51,17 @@ def checkboxes(id, options, select_all=True):
     :param options: array of dictionaries of label-value pairs which will be the options for this dropdown menu
     :param select_all: determines if all or no options are selected off the start
     """
+    options = [{'label': option, 'value': option} for option in options]
     if select_all:
         obj = dcc.Checklist(
             options=options,
-            value=[entry['value'] for entry in options]
+            value=[entry['value'] for entry in options],
+            labelStyle={'display': 'inline-block', 'marginRight': '15px'}
         )
     else:
         obj = dcc.Checklist(
-            options=options
+            options=options,
+            labelStyle={'display': 'inline-block', 'marginRight': '15px'}
         )
 
     return obj
@@ -165,7 +168,7 @@ def handle_debate_event(debate, time_or_topic):
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'}
             )
 
-placeholder_wordcloud_data = {'apple' : 5, 'cherry' : 10, 'lemon' : 2, 'orange' : 7, 'pineapple' : 9}
+placeholder_wordcloud_data = {'apple' : 5}
 remove_string = ['the', 'is', 'of', 'that', 'to', 'and', 'he', 'you', 'it', 'a', 'in', 'crosstalk', 'i', 'we', 'have', 'they', 'its', 'but', 'because', 'was', 'were', 'be', 'do', 'at', 'not', 'what',
                  'are', 'by', 'for', 'thats', 'your', 'with', 'this', 'so', 'on']
 
@@ -288,10 +291,6 @@ def create_wordcloud_from_topic(slider_range, dataframe, index_to_time):
     return make_wordcloud(hist)
 
 def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, both, candidate1, candidate2, times, index_to_time):
-    # TODO WIP
-    # return biden src & Xstyle, trump src & Xstyle, harris src & Xstyle, pence src & Xstyle
-    # print(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, sep='\n')
-
     # Handle who is visible and who isn't
     if debate == 'PD1' or debate == 'PD2':
         biden_style = {'display': 'inline-block'}

@@ -19,11 +19,14 @@ from utils import *
 from data_processing import first_debate
 from data_processing import second_debate
 from data_processing import vp_debate
+from data_processing import get_political_topics
 
 # Collect necessary data
 debate1, biden1, trump1, times1, index1 = first_debate()
 debate2, biden2, trump2, times2, index2 = second_debate()
 debate_vp, harris, pence, times_vp, index_vp = vp_debate()
+
+political_topics, political_subtopics = get_political_topics()
 
 # Set up the dashboard page
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -98,11 +101,22 @@ app.layout = html.Div(
         html.Br(),
         html.H3('Political Topics Visualization'),
         html.Div(
+            children=[dropdown('political_topics_selector', political_topics)],
+            style={'width' : '300px', 'display': 'block', 'marginRight': '50px'}
+        ),
+        html.Br(),
+        html.Div(
+            id='political_subtopics_checkboxes',
+            children=[checkboxes(id='subtopics', options=political_subtopics['COVID-19'])],
+            style={}
+        ),
+        html.Br(),
+        html.Div(
             children=[range_slider('month_slider', ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], step=0.25)],
             style={}
         )
     ],
-    style={'marginLeft' : '50px', 'marginRight' : '50px', 'marginTop' : '50px'}
+    style={'marginLeft' : '50px', 'marginRight' : '50px', 'marginTop' : '50px', 'marginBottom': '500px'}
 )
 
 @app.callback(
@@ -148,6 +162,13 @@ def change_wordcloud(debate, time_or_topic, time1, time2, topic1, topic2, time_v
         return handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, debate_vp, harris, pence, times_vp, index_vp)
     else:
         raise Exception('Unknown debate')
+
+@app.callback(
+    Output('political_subtopics_checkboxes', 'children'),
+    Input('political_topics_selector', 'value')
+)
+def change_political_topics_checkboxes(political_topic):
+    return [checkboxes(id='subtopics', options=political_subtopics[political_topic])]
 
 if __name__ == '__main__':
     app.run_server(debug=True)

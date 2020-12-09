@@ -259,5 +259,42 @@ def vp_debate():
 
     return debate_vp, harris_debate_vp, pence_debate_vp, times, index_to_seconds
 
+def get_political_topics():
+    political_topics = [
+        {'label': 'COVID-19', 'value': 'COVID-19'},
+        {'label': 'Economy', 'value': 'Economy'},
+        {'label': 'Racial Equality', 'value': 'Racial Equality'},
+        {'label': 'Violence', 'value': 'Violence'},
+        {'label': 'Social Rights', 'value': 'Social Rights'},
+        {'label': 'Healthcare', 'value': 'Healthcare'},
+        {'label': 'Unemployment', 'value': 'Unemployment'},
+        {'label': 'Sex Equality', 'value': 'Sex Equality'},
+        {'label': 'Education', 'value': 'Education'},
+        {'label': 'Election Integrity', 'value': 'Election Integrity'},
+        {'label': 'Environment', 'value': 'Environment'},
+        {'label': 'Police', 'value': 'Police'},
+        {'label': 'Military', 'value': 'Military'},
+        {'label': 'Foreign Policity', 'value': 'Foreign Policity'}
+    ]
+
+    political_subtopics = {
+        'COVID-19': ['covid', 'covid-19', 'coronavirus', 'sars-cov2'],
+        'Economy': ['economy', 'stock market', 'nasdaq'],
+        'Racial Equality': ['protests', 'george floyd', 'racial equality'],
+        'Violence': ['guns', 'how to protect yourself from shooter', 'murder'],
+        'Social Rights': ['gay rights', 'trans rights'],
+        'Healthcare': ['universal healthcare', 'cheap insurance'],
+        'Unemployment': ['unemployment', 'unemployment rate', 'how to get a job fast'],
+        'Sex Equality': ['women\'s right', 'reproductive rights', 'abortion'],
+        'Education': ['free college', 'free university', 'student debt'],
+        'Election Integrity': ['election integrity', 'mail in votes', 'recount', 'voter fraud'],
+        'Environment': ['climate change', 'green', 'paris act'],
+        'Police': ['police brutality', 'defund the police', 'protests', 'police'],
+        'Military': ['war', 'us military', 'military'],
+        'Foreign Policity': ['iran', 'china', 'russia', 'us relations', 'united states relations'],
+    }
+
+    return political_topics, political_subtopics
+
 
 
