@@ -99,7 +99,7 @@ def range_slider(id, labels, step=1):
         id=id,
         min=0,
         max=(len(labels) - 1),
-        marks={i: label for i, label in enumerate(labels)},
+        marks={i: {'label': (label.lstrip('00:') if label != '00:00:00' else '0:00'), 'style': {'font-size': '11px'}} for i, label in enumerate(labels)},
         value=[0, (len(labels) - 1)],
         step=step,
         allowCross=False
