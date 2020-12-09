@@ -48,6 +48,16 @@ def convert_time(x):
 def time_in_seconds(x):
     return 3600 * x['hour'] + 60 * x['minute'] + x['second']
 
+def format_time(x):
+    hour = str(int(x // 3600))
+    x = x % 3600
+    minute = str(int(x // 60))
+    x = x % 60
+    second = str(int(x))
+    return f'{hour.zfill(2)}:{minute.zfill(2)}:{second.zfill(2)}'
+
+vectorized_format_time = np.vectorize(format_time)
+
 
 ####################################
 ##### Data Retrieval Functions #####
@@ -100,7 +110,16 @@ def first_debate():
     biden_debate1 = debate1[debate1['speaker'] == 'Joe Biden']
     trump_debate1 = debate1[debate1['speaker'] == 'Donald Trump']
 
-    return debate1, biden_debate1, trump_debate1
+    # Get the slider info
+    low, high = debate1['time_seconds'].iloc[[0, -1]].to_numpy()
+    seconds, step_size = np.linspace(low, high, num=30, retstep=True)
+    seconds = seconds.round()
+    index_to_seconds = {}
+    for i, second in enumerate(seconds):
+        index_to_seconds[i] = second
+    times = vectorized_format_time(seconds)
+
+    return debate1, biden_debate1, trump_debate1, times, index_to_seconds
 
 
 def second_debate():
@@ -160,7 +179,16 @@ def second_debate():
     biden_debate2 = debate2[debate2['speaker'] == 'Joe Biden']
     trump_debate2 = debate2[debate2['speaker'] == 'Donald Trump']
 
-    return debate2, biden_debate2, trump_debate2
+    # Get the slider info
+    low, high = debate2['time_seconds'].iloc[[0, -1]].to_numpy()
+    seconds, step_size = np.linspace(low, high, num=30, retstep=True)
+    seconds = seconds.round()
+    index_to_seconds = {}
+    for i, second in enumerate(seconds):
+        index_to_seconds[i] = second
+    times = vectorized_format_time(seconds)
+
+    return debate2, biden_debate2, trump_debate2, times, index_to_seconds
 
 
 def vp_debate():
@@ -220,7 +248,16 @@ def vp_debate():
     harris_debate_vp = debate_vp[debate_vp['speaker'] == 'Kamala Harris']
     pence_debate_vp = debate_vp[debate_vp['speaker'] == 'Mike Pence']
 
-    return debate_vp, harris_debate_vp, pence_debate_vp
+    # Get the slider info
+    low, high = debate_vp['time_seconds'].iloc[[0, -1]].to_numpy()
+    seconds, step_size = np.linspace(low, high, num=30, retstep=True)
+    seconds = seconds.round()
+    index_to_seconds = {}
+    for i, second in enumerate(seconds):
+        index_to_seconds[i] = second
+    times = vectorized_format_time(seconds)
+
+    return debate_vp, harris_debate_vp, pence_debate_vp, times, index_to_seconds
 
 
 

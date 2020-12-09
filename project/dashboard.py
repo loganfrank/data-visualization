@@ -16,7 +16,16 @@ from io import BytesIO
 import base64
 
 from utils import *
+from data_processing import first_debate
+from data_processing import second_debate
+from data_processing import vp_debate
 
+# Collect necessary data
+debate1, biden1, trump1, times1, index1 = first_debate()
+debate2, biden2, trump2, times2, index2 = second_debate()
+debate_vp, harris, pence, times_vp, index_vp = vp_debate()
+
+# Set up the dashboard page
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -42,39 +51,43 @@ app.layout = html.Div(
         html.Br(),
         html.Div(
             id='time_slider1_div',
-            children=[range_slider('time_slider1', ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])],
-            style={'width' : '900px', 'marginLeft' : '50px'}
-        ),
-        html.Div(
-            id='time_slider2_div',
-            children=[range_slider('time_slider2', ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])],
-            style={'width' : '900px', 'marginLeft' : '50px'}
+            children=[range_slider('time_slider1', times1, step=0.25)],
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Div(
             id='topic_slider1_div',
             children=[range_slider('topic_slider1', ['The Trump and Biden Records', 'The Supreme Court', 'COVID-19', 'The Economy', 'Race and Violence in our Cities', 'The Integrity of the Election'])],
-            style={'width' : '900px', 'marginLeft' : '50px'}
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
+        ),
+        html.Div(
+            id='time_slider2_div',
+            children=[range_slider('time_slider2', times2, step=0.25)],
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Div(
             id='topic_slider2_div',
             children=[range_slider('topic_slider2', ['Fighting COVID-19', 'American Families', 'Race in America', 'Climate Change', 'National Security', 'Leadership'])],
-            style={'width' : '900px', 'marginLeft' : '50px'}
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Div(
             id='time_slider_vp_div',
-            children=[range_slider('time_slider_vp', ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])],
-            style={'width' : '900px', 'marginLeft' : '50px'}
+            children=[range_slider('time_slider_vp', times_vp, step=0.25)],
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Div(
             id='topic_slider_vp_div',
             children=[range_slider('topic_slider_vp', ['Coronavirus Pandemic', 'Economy', 'Supreme Court', 'China / Foreign Policy', 'Racism', 'Presidential Health and Succession'])],
-            style={'width' : '900px', 'marginLeft' : '50px'}
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Br(),
-        html.Img(id="biden_cloud"),
-        html.Img(id="trump_cloud"),
-        html.Img(id="harris_cloud"),
-        html.Img(id="pence_cloud"),
+        html.Div(
+            children=[html.Img(id="biden_cloud", style={'display': 'inline-block'}), html.Img(id="trump_cloud", style={'display': 'inline-block'})],
+            style={'marginLeft': '100px'}
+        ),
+        html.Div(
+            children=[html.Img(id="harris_cloud", style={'display': 'inline-block'}), html.Img(id="pence_cloud", style={'display': 'inline-block'})],
+            style={'marginLeft': '100px'}
+        ),
         html.Br(),
         html.Br(),
         html.H3('Political Topics Visualization'),
@@ -99,6 +112,7 @@ app.layout = html.Div(
 def change_slider(debate, time_or_topic):
     return handle_debate_event(debate, time_or_topic)
 
+
 @app.callback(
     Output('biden_cloud', 'src'),
     Output('biden_cloud', 'style'),
@@ -118,7 +132,14 @@ def change_slider(debate, time_or_topic):
     Input('topic_slider_vp', 'value'),
 )
 def change_wordcloud(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp):
-    return handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp)
+    if debate == 'PD1':
+        return handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, debate1, biden1, trump1, times1, index1)
+    elif debate == 'PD2':
+        return handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, debate2, biden2, trump2, times2, index2)
+    elif debate == 'VPD':
+        return handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, debate_vp, harris, pence, times_vp, index_vp)
+    else:
+        raise Exception('Unknown debate')
 
 if __name__ == '__main__':
     app.run_server(debug=True)
