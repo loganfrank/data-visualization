@@ -56,7 +56,7 @@ app.layout = html.Div(
         ),
         html.Div(
             id='topic_slider1_div',
-            children=[range_slider('topic_slider1', ['The Trump and Biden Records', 'The Supreme Court', 'COVID-19', 'The Economy', 'Race and Violence in our Cities', 'The Integrity of the Election'])],
+            children=[range_slider('topic_slider1', ['The Supreme Court', 'COVID-19', 'The Economy', 'Race and Violence in our Cities', 'The Trump and Biden Records', 'The Integrity of the Election'])],
             style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Div(
@@ -66,7 +66,7 @@ app.layout = html.Div(
         ),
         html.Div(
             id='topic_slider2_div',
-            children=[range_slider('topic_slider2', ['Fighting COVID-19', 'American Families', 'Race in America', 'Climate Change', 'National Security', 'Leadership'])],
+            children=[range_slider('topic_slider2', ['Fighting COVID-19', 'National Security', 'American Families', 'Race in America', 'Climate Change', 'Leadership'])],
             style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Div(
@@ -76,17 +76,23 @@ app.layout = html.Div(
         ),
         html.Div(
             id='topic_slider_vp_div',
-            children=[range_slider('topic_slider_vp', ['Coronavirus Pandemic', 'Economy', 'Supreme Court', 'China / Foreign Policy', 'Racism', 'Presidential Health and Succession'])],
+            children=[range_slider('topic_slider_vp', ['Coronavirus Pandemic', 'The Role of the Vice President', 'Economy', 'Climate Change', 'China / Foreign Policy', 'Supreme Court', 'Racism', 'The Integrity of the Election'])],
             style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
         ),
         html.Br(),
         html.Div(
-            children=[html.Img(id="biden_cloud", style={'display': 'inline-block'}), html.Img(id="trump_cloud", style={'display': 'inline-block'})],
-            style={'marginLeft': '100px'}
+            id='p_cloud',
+            children=[
+                html.Div(id='biden_div', children=[html.H3('Joe Biden', style={'marginLeft': '35%'}), html.Img(id="biden_cloud")], style={'display': 'inline-block'}),
+                html.Div(id='trump_div', children=[html.H3('Donald Trump', style={'marginLeft': '35%'}), html.Img(id="trump_cloud")], style={'display': 'inline-block'})
+            ]
         ),
         html.Div(
-            children=[html.Img(id="harris_cloud", style={'display': 'inline-block'}), html.Img(id="pence_cloud", style={'display': 'inline-block'})],
-            style={'marginLeft': '100px'}
+            id='vp_cloud',
+            children=[
+                html.Div(id='harris_div', children=[html.H3('Kamala Harris', style={'marginLeft': '35%'}), html.Img(id="harris_cloud")], style={'display': 'inline-block'}),
+                html.Div(id='pence_div', children=[html.H3('Mike Pence', style={'marginLeft': '35%'}), html.Img(id="pence_cloud")], style={'display': 'inline-block'})
+            ]
         ),
         html.Br(),
         html.Br(),
@@ -115,13 +121,15 @@ def change_slider(debate, time_or_topic):
 
 @app.callback(
     Output('biden_cloud', 'src'),
-    Output('biden_cloud', 'style'),
+    Output('biden_div', 'style'),
     Output('trump_cloud', 'src'),
-    Output('trump_cloud', 'style'),
+    Output('trump_div', 'style'),
+    Output('p_cloud', 'style'),
     Output('harris_cloud', 'src'),
-    Output('harris_cloud', 'style'),
+    Output('harris_div', 'style'),
     Output('pence_cloud', 'src'),
-    Output('pence_cloud', 'style'),
+    Output('pence_div', 'style'),
+    Output('vp_cloud', 'style'),
     Input('debate_selector', 'value'),
     Input('debate_time_topic_selector', 'value'),
     Input('time_slider1', 'value'),

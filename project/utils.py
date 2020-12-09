@@ -166,7 +166,8 @@ def handle_debate_event(debate, time_or_topic):
             )
 
 placeholder_wordcloud_data = {'apple' : 5, 'cherry' : 10, 'lemon' : 2, 'orange' : 7, 'pineapple' : 9}
-remove_string = ['the', 'is', 'of', 'that', 'to', 'and', 'he', 'you', 'it', 'a', 'in', 'crosstalk']
+remove_string = ['the', 'is', 'of', 'that', 'to', 'and', 'he', 'you', 'it', 'a', 'in', 'crosstalk', 'i', 'we', 'have', 'they', 'its', 'but', 'because', 'was', 'were', 'be', 'do', 'at', 'not', 'what',
+                 'are', 'by', 'for', 'thats', 'your', 'with', 'this', 'so', 'on']
 
 def cloud(data):
     """
@@ -188,9 +189,6 @@ def temporary_word_cloud():
     return make_wordcloud(placeholder_wordcloud_data)
 
 def create_wordcloud(slider_range, dataframe, index_to_time):
-    # print(slider_range, dataframe.columns, index_to_time, sep='\n')
-
-
     if slider_range[0] == slider_range[1]:
         hist = {}
         hist['none'] = 1
@@ -234,27 +232,81 @@ def create_wordcloud(slider_range, dataframe, index_to_time):
 
     return make_wordcloud(hist)
 
+topic_index_to_time1 = {
+    0: 0,
+    1: 1040,
+    2: 1938,
+    3: 2894,
+    4: 3961,
+    5: 4949,
+    6: 5636,
+}
+
+topic_index_to_time2 = {
+    0: 0,
+    1: 1741,
+    2: 2872,
+    3: 4241,
+    4: 5033,
+    5: 5748,
+    6: 5975,
+}
+
+topic_index_to_time_vp = {
+    0: 0,
+    1: 804,
+    2: 1403,
+    3: 1957,
+    4: 2550,
+    5: 3381,
+    6: 4026,
+    7: 4690,
+    8: 5270
+}
+
+def create_wordcloud_from_topic(slider_range, dataframe, index_to_time):
+    # Do some linear interpolation
+    low = index_to_time[slider_range[0]]
+    high = index_to_time[slider_range[1] + 1]
+
+    # Threshold the data frame 
+    parsed = dataframe[(dataframe['time_seconds'] >= low) & (dataframe['time_seconds'] <= high)]
+
+    # Parse the text to get word to frequency pairs
+    text = parsed['text']
+    text = ' '.join(text)
+    text = re.sub(r'[^\w\s]','',text).lower()
+    text = text.split()
+    text = np.array([w for w in text if w not in remove_string])
+    words, frequencies = np.unique(text, return_counts=True)
+
+    # Create a dictionary for histogram
+    hist = {}
+    for word, frequency in zip(words, frequencies):
+        hist[word] = frequency
+
+    return make_wordcloud(hist)
+
 def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, both, candidate1, candidate2, times, index_to_time):
     # TODO WIP
     # return biden src & Xstyle, trump src & Xstyle, harris src & Xstyle, pence src & Xstyle
     # print(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, sep='\n')
 
     # Handle who is visible and who isn't
-    if debate == 'PD1':
-        biden_style = {'display': 'inline-block', 'marginRight': '100px'}
-        trump_style = {'display': 'inline-block', 'marginRight': '100px'}
+    if debate == 'PD1' or debate == 'PD2':
+        biden_style = {'display': 'inline-block'}
+        trump_style = {'display': 'inline-block', 'marginLeft': '100px'}
+        p_style = {'display': 'block', 'marginLeft': '100px'}
         harris_style = {'display': 'none'}
         pence_style = {'display': 'none'}
-    elif debate == 'PD2':
-        biden_style = {'display': 'inline-block', 'marginRight': '100px'}
-        trump_style = {'display': 'inline-block', 'marginRight': '100px'}
-        harris_style = {'display': 'none'}
-        pence_style = {'display': 'none'}
+        vp_style = {'display': 'none'}
     elif debate == 'VPD':
         biden_style = {'display': 'none'}
         trump_style = {'display': 'none'}
-        harris_style = {'display': 'inline-block', 'marginRight': '100px'}
-        pence_style = {'display': 'inline-block', 'marginRight': '100px'}
+        p_style = {'display': 'none'}
+        harris_style = {'display': 'inline-block'}
+        pence_style = {'display': 'inline-block', 'marginLeft': '100px'}
+        vp_style = {'display': 'block', 'marginLeft': '100px'}
 
     # Handle generating the word clouds
     if time_or_topic == 'time':
@@ -269,14 +321,14 @@ def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, 
             wc4 = create_wordcloud(time_vp, candidate2, index_to_time)
     elif time_or_topic == 'topic':
         if debate == 'PD1':
-            wc1 = create_wordcloud(topic1, candidate1, index_to_time)
-            wc2 = create_wordcloud(topic1, candidate2, index_to_time)
+            wc1 = create_wordcloud_from_topic(topic1, candidate1, topic_index_to_time1)
+            wc2 = create_wordcloud_from_topic(topic1, candidate2, topic_index_to_time1)
         elif debate == 'PD2':
-            wc1 = create_wordcloud(topic2, candidate1, index_to_time)
-            wc2 = create_wordcloud(topic2, candidate2, index_to_time)
+            wc1 = create_wordcloud_from_topic(topic2, candidate1, topic_index_to_time2)
+            wc2 = create_wordcloud_from_topic(topic2, candidate2, topic_index_to_time2)
         elif debate == 'VPD':
-            wc3 = create_wordcloud(topic_vp, candidate1, index_to_time)
-            wc4 = create_wordcloud(topic_vp, candidate2, index_to_time)
+            wc3 = create_wordcloud_from_topic(topic_vp, candidate1, topic_index_to_time_vp)
+            wc4 = create_wordcloud_from_topic(topic_vp, candidate2, topic_index_to_time_vp)
 
     if debate == 'PD1' or debate == 'PD2':
         wc3 = temporary_word_cloud()
@@ -285,4 +337,4 @@ def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, 
         wc1 = temporary_word_cloud()
         wc2 = temporary_word_cloud()
 
-    return wc1, biden_style, wc2, trump_style, wc3, harris_style, wc4, pence_style
+    return wc1, biden_style, wc2, trump_style, p_style, wc3, harris_style, wc4, pence_style, vp_style
