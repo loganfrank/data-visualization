@@ -358,5 +358,5 @@ def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, 
     return wc1, biden_style, wc2, trump_style, p_style, wc3, harris_style, wc4, pence_style, vp_style
 
 
-def handle_spectrogram_event():
-    ...
+def handle_spectrogram_event(debate, value):
+    return f'{debate}{value}'
