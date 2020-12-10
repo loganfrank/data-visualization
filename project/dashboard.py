@@ -26,6 +26,10 @@ debate1, biden1, trump1, times1, index1 = first_debate()
 debate2, biden2, trump2, times2, index2 = second_debate()
 debate_vp, harris, pence, times_vp, index_vp = vp_debate()
 
+ticks1 = 30 / (int(times1[-1].split(':')[0]) * 60 + int(times1[-1].split(':')[1]) + 1)
+ticks2 = 30 / (int(times2[-1].split(':')[0]) * 60 + int(times2[-1].split(':')[1]) + 1)
+ticks_vp = 30 / (int(times_vp[-1].split(':')[0]) * 60 + int(times_vp[-1].split(':')[1]) + 1)
+
 political_topics, political_subtopics = get_political_topics()
 
 # Set up the dashboard page
@@ -51,6 +55,8 @@ app.layout = html.Div(
                 style={'width' : '300px', 'display': 'inline-block'}
             ),
         ]),
+        html.Br(),
+        html.H4('Word Clouds'),
         html.Br(),
         html.Div(
             id='time_slider1_div',
@@ -99,6 +105,27 @@ app.layout = html.Div(
         ),
         html.Br(),
         html.Br(),
+        html.H4('Spectrograms'),
+        html.Br(),
+        html.Div(
+            id='spectrogram_slider1_div',
+            children=[slider('spectrogram_slider1', times1, step=ticks1)],
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
+        ),
+        html.Div(
+            id='spectrogram_slider2_div',
+            children=[slider('spectrogram_slider2', times2, step=ticks2)],
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
+        ),
+        html.Div(
+            id='spectrogram_slider_vp_div',
+            children=[slider('spectrogram_slider_vp', times_vp, step=ticks_vp)],
+            style={'width' : '96%', 'marginLeft' : '50px', 'marginRight' : '50px'}
+        ),
+        html.Br(),
+        html.Br(),
+        html.H1(id='spectrogram_placeholder', children='This is only a placeholder'),
+        html.Br(),
         html.H3('Political Topics Visualization'),
         html.Div(
             children=[dropdown('political_topics_selector', political_topics)],
@@ -126,6 +153,9 @@ app.layout = html.Div(
     Output('topic_slider2_div', 'style'),
     Output('time_slider_vp_div', 'style'),
     Output('topic_slider_vp_div', 'style'),
+    Output('spectrogram_slider1_div', 'style'),
+    Output('spectrogram_slider2_div', 'style'),
+    Output('spectrogram_slider_vp_div', 'style'),
     Input('debate_selector', 'value'),
     Input('debate_time_topic_selector', 'value')
 )
@@ -162,6 +192,24 @@ def change_wordcloud(debate, time_or_topic, time1, time2, topic1, topic2, time_v
         return handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, time_vp, topic_vp, debate_vp, harris, pence, times_vp, index_vp)
     else:
         raise Exception('Unknown debate')
+
+@app.callback(
+    Output('spectrogram_placeholder', 'children'),
+    Input('debate_selector', 'value'),
+    Input('spectrogram_slider1', 'value'),
+    Input('spectrogram_slider2', 'value'),
+    Input('spectrogram_slider_vp', 'value')
+)
+def change_spectrogram(debate, value1, value2, value_vp):
+    print(debate, value1, value2, value_vp)
+    # debate is one of the bottom three
+    # value is some value between 0 and 30 (with step size), interpolate to get the actual time
+    if debate == 'PD1':
+        return handle_spectrogram_event(debate, value1)
+    elif debate == 'PD2':
+        return handle_spectrogram_event(debate, value2)
+    elif debate == 'VPD':
+        return handle_spectrogram_event(debate, value_vp)
 
 @app.callback(
     Output('political_subtopics_checkboxes', 'children'),

@@ -85,9 +85,10 @@ def slider(id, labels, step=1):
     :param labels: array of labels
     """
     obj = dcc.Slider(
+        id=id,
         min=0,
         max=(len(labels) - 1),
-        marks={i: label for i, label in enumerate(labels)},
+        marks={i: {'label': (label.lstrip('00:') if label != '00:00:00' else '0:00'), 'style': {'font-size': '11px'}} for i, label in enumerate(labels)},
         value=0,
         step=step
     )
@@ -118,6 +119,9 @@ def handle_debate_event(debate, time_or_topic):
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'}
             )
         elif time_or_topic == 'topic':
@@ -126,6 +130,9 @@ def handle_debate_event(debate, time_or_topic):
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'}
             )
@@ -137,7 +144,10 @@ def handle_debate_event(debate, time_or_topic):
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
-                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'}
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
             )
         elif time_or_topic == 'topic':
             return (
@@ -146,7 +156,10 @@ def handle_debate_event(debate, time_or_topic):
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
-                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'}
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
             )
     elif debate == 'VPD':
         if time_or_topic == 'time':
@@ -156,13 +169,19 @@ def handle_debate_event(debate, time_or_topic):
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
-                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'}
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'}
             )
         elif time_or_topic == 'topic':
             return (
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
+                {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'none'},
                 {'width' : '96%', 'marginLeft' : '50px', 'display': 'block'}
@@ -337,3 +356,7 @@ def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, 
         wc2 = temporary_word_cloud()
 
     return wc1, biden_style, wc2, trump_style, p_style, wc3, harris_style, wc4, pence_style, vp_style
+
+
+def handle_spectrogram_event():
+    ...
