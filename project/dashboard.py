@@ -26,9 +26,9 @@ debate1, biden1, trump1, times1, index1 = first_debate()
 debate2, biden2, trump2, times2, index2 = second_debate()
 debate_vp, harris, pence, times_vp, index_vp = vp_debate()
 
-ticks1 = 30 / (int(times1[-1].split(':')[0]) * 60 + int(times1[-1].split(':')[1]) + 1)
-ticks2 = 30 / (int(times2[-1].split(':')[0]) * 60 + int(times2[-1].split(':')[1]) + 1)
-ticks_vp = 30 / (int(times_vp[-1].split(':')[0]) * 60 + int(times_vp[-1].split(':')[1]) + 1)
+ticks1 = 30 / ((int(times1[-1].split(':')[0]) * 60 + int(times1[-1].split(':')[1]) + 1) *3)
+ticks2 = 30 / ((int(times2[-1].split(':')[0]) * 60 + int(times2[-1].split(':')[1]) + 1) *3)
+ticks_vp = 30 / ((int(times_vp[-1].split(':')[0]) * 60 + int(times_vp[-1].split(':')[1]) + 1) *3)
 
 political_topics, political_subtopics = get_political_topics()
 
@@ -124,7 +124,10 @@ app.layout = html.Div(
         ),
         html.Br(),
         html.Br(),
-        html.H1(id='spectrogram_placeholder', children='This is only a placeholder'),
+        html.Div(
+            id='spect_div', 
+            children=[html.Img(id="spect_cloud")], style={'display': 'inline-block', 'marginLeft': '-200px', 'size': '100%'}
+        ),
         html.Br(),
         html.H3('Political Topics Visualization'),
         html.Div(
@@ -133,14 +136,19 @@ app.layout = html.Div(
         ),
         html.Br(),
         html.Div(
-            id='political_subtopics_checkboxes',
-            children=[checkboxes(id='subtopics', options=political_subtopics['COVID-19'])],
+            id='political_subtopics_checkboxes_div',
+            children=[checkboxes(id='political_subtopics_checkboxes', options=political_subtopics['covid'])],
             style={}
         ),
         html.Br(),
         html.Div(
             children=[range_slider('month_slider', ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], step=0.25)],
             style={}
+        ),
+        html.Br(),
+        html.Div(
+            id='google_trends_graph_div',
+            children=[dcc.Graph(id='google_trends_graph', figure=go.Figure())]
         )
     ],
     style={'marginLeft' : '50px', 'marginRight' : '50px', 'marginTop' : '50px', 'marginBottom': '500px'}
@@ -194,7 +202,7 @@ def change_wordcloud(debate, time_or_topic, time1, time2, topic1, topic2, time_v
         raise Exception('Unknown debate')
 
 @app.callback(
-    Output('spectrogram_placeholder', 'children'),
+    Output('spect_cloud', 'src'),
     Input('debate_selector', 'value'),
     Input('spectrogram_slider1', 'value'),
     Input('spectrogram_slider2', 'value'),
@@ -204,6 +212,9 @@ def change_spectrogram(debate, value1, value2, value_vp):
     print(debate, value1, value2, value_vp)
     # debate is one of the bottom three
     # value is some value between 0 and 30 (with step size), interpolate to get the actual time
+    value1 = int(value1/ticks1 * 20) - (int(value1/ticks1 * 20) % 20)
+    value2 = int(value2/ticks2 * 20) - (int(value2/ticks2 * 20) % 20)
+    value_vp = int(value_vp/ticks_vp * 20) - (int(value_vp/ticks_vp * 20) % 20)
     if debate == 'PD1':
         return handle_spectrogram_event(debate, value1)
     elif debate == 'PD2':
@@ -212,11 +223,27 @@ def change_spectrogram(debate, value1, value2, value_vp):
         return handle_spectrogram_event(debate, value_vp)
 
 @app.callback(
-    Output('political_subtopics_checkboxes', 'children'),
+    Output('political_subtopics_checkboxes', 'options'),
+    Output('political_subtopics_checkboxes', 'value'),
     Input('political_topics_selector', 'value')
 )
 def change_political_topics_checkboxes(political_topic):
-    return [checkboxes(id='subtopics', options=political_subtopics[political_topic])]
+    print('here ' + political_topic)
+    options = [{'label': item, 'value': item} for item in political_subtopics[political_topic]]
+    print(options)
+    return options, political_subtopics[political_topic]
+
+@app.callback(
+    Output('google_trends_graph', 'figure'),
+    Input('political_topics_selector', 'value'),
+    Input('political_subtopics_checkboxes', 'value'),
+    Input('month_slider', 'value')
+)
+def change_google_trends_graph(topic, selected_subtopics, month_value):
+    if not all(item in political_subtopics[topic] for item in selected_subtopics):
+        selected_subtopics = political_subtopics[topic]
+    print(topic, selected_subtopics)
+    return handle_google_trends_event(topic, selected_subtopics, month_value)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 
@@ -261,38 +263,46 @@ def vp_debate():
 
 def get_political_topics():
     political_topics = [
-        {'label': 'COVID-19', 'value': 'COVID-19'},
-        {'label': 'Economy', 'value': 'Economy'},
-        {'label': 'Racial Equality', 'value': 'Racial Equality'},
-        {'label': 'Violence', 'value': 'Violence'},
-        {'label': 'Social Rights', 'value': 'Social Rights'},
-        {'label': 'Healthcare', 'value': 'Healthcare'},
-        {'label': 'Unemployment', 'value': 'Unemployment'},
-        {'label': 'Sex Equality', 'value': 'Sex Equality'},
-        {'label': 'Education', 'value': 'Education'},
-        {'label': 'Election Integrity', 'value': 'Election Integrity'},
-        {'label': 'Environment', 'value': 'Environment'},
-        {'label': 'Police', 'value': 'Police'},
-        {'label': 'Military', 'value': 'Military'},
-        {'label': 'Foreign Policity', 'value': 'Foreign Policity'}
+        {'label': 'COVID-19', 'value': 'covid'},
+        {'label': 'Economy', 'value': 'economy'},
+        {'label': 'Racial Equality', 'value': 'racism'},
+        {'label': 'Violence', 'value': 'violence'},
+        {'label': 'Social Rights', 'value': 'social'},
+        {'label': 'Healthcare', 'value': 'health'},
+        {'label': 'Unemployment', 'value': 'unemployment'},
+        {'label': 'Sex Equality', 'value': 'sex'},
+        {'label': 'Education', 'value': 'education'},
+        {'label': 'Election Integrity', 'value': 'election'},
+        {'label': 'Environment', 'value': 'environment'},
+        {'label': 'Police', 'value': 'police'},
+        {'label': 'Military', 'value': 'military'},
+        {'label': 'Foreign Policity', 'value': 'foreign'}
     ]
 
     political_subtopics = {
-        'COVID-19': ['covid', 'covid-19', 'coronavirus', 'sars-cov2'],
-        'Economy': ['economy', 'stock market', 'nasdaq'],
-        'Racial Equality': ['protests', 'george floyd', 'racial equality'],
-        'Violence': ['guns', 'how to protect yourself from shooter', 'murder'],
-        'Social Rights': ['gay rights', 'trans rights'],
-        'Healthcare': ['universal healthcare', 'cheap insurance'],
-        'Unemployment': ['unemployment', 'unemployment rate', 'how to get a job fast'],
-        'Sex Equality': ['women\'s right', 'reproductive rights', 'abortion'],
-        'Education': ['free college', 'free university', 'student debt'],
-        'Election Integrity': ['election integrity', 'mail in votes', 'recount', 'voter fraud'],
-        'Environment': ['climate change', 'green', 'paris act'],
-        'Police': ['police brutality', 'defund the police', 'protests', 'police'],
-        'Military': ['war', 'us military', 'military'],
-        'Foreign Policity': ['iran', 'china', 'russia', 'us relations', 'united states relations'],
+        'covid': [],
+        'economy': [],
+        'racism': [],
+        'violence': [],
+        'social': [],
+        'health': [],
+        'unemployment': [],
+        'sex': [],
+        'education': [],
+        'election': [],
+        'environment': [],
+        'police': [],
+        'military': [],
+        'foreign': []
     }
+    related_words_dir = './data/google_trends/related_words/'
+
+    for topic_file in os.listdir(related_words_dir):
+        topic = topic_file.split('-')[0]
+        with open(f'{related_words_dir}{topic_file}', 'r') as f:
+            subwords = f.readlines()
+            subwords = [subword.strip(' \n') for subword in subwords]
+        political_subtopics[topic] = subwords
 
     return political_topics, political_subtopics
 

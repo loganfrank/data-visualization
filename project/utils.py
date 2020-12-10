@@ -54,12 +54,14 @@ def checkboxes(id, options, select_all=True):
     options = [{'label': option, 'value': option} for option in options]
     if select_all:
         obj = dcc.Checklist(
+            id=id,
             options=options,
             value=[entry['value'] for entry in options],
             labelStyle={'display': 'inline-block', 'marginRight': '15px'}
         )
     else:
         obj = dcc.Checklist(
+            id=id,
             options=options,
             labelStyle={'display': 'inline-block', 'marginRight': '15px'}
         )
@@ -359,4 +361,38 @@ def handle_wordcloud_event(debate, time_or_topic, time1, time2, topic1, topic2, 
 
 
 def handle_spectrogram_event(debate, value):
-    return f'{debate}{value}'
+    if debate == 'PD1':
+        file_select = 'pDebate'
+    elif debate == 'PD2':
+        file_select = 'p2Debate'
+    elif debate == 'VPD':
+        file_select = 'vpDebate'
+    image_filename = f'./data/spectrograms/{file_select}{value}.jpg'
+    encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+    return 'data:image/png;base64,{}'.format(encoded_image.decode())
+
+week_index = np.linspace(0, 11, 49)
+csv_directory = './data/google_trends/interest/'
+
+def find_nearest(array, value):
+    """
+    Taken from https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
+    """
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]
+
+def handle_google_trends_event(topic, selected_subtopics, month_value):
+    dataframe = pd.read_csv(f'{csv_directory}{topic}.csv')
+    dataframe['indexes'] = week_index
+    low = find_nearest(week_index, month_value[0])
+    high = find_nearest(week_index, month_value[1])
+
+    dataframe = dataframe[(dataframe['indexes'] >= low) & (dataframe['indexes'] <= high)]
+    dataframe = dataframe[selected_subtopics]
+
+    dataframe['total'] = dataframe.sum(axis=1)
+    dataframe['total'] = dataframe['total'] / dataframe['total'].max() * 100
+    dataframe = dataframe.reset_index()
+    fig = px.line(dataframe, x='index', y='total')
+    return fig
