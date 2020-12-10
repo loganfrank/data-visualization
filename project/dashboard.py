@@ -209,7 +209,6 @@ def change_wordcloud(debate, time_or_topic, time1, time2, topic1, topic2, time_v
     Input('spectrogram_slider_vp', 'value')
 )
 def change_spectrogram(debate, value1, value2, value_vp):
-    print(debate, value1, value2, value_vp)
     # debate is one of the bottom three
     # value is some value between 0 and 30 (with step size), interpolate to get the actual time
     value1 = int(value1/ticks1 * 20) - (int(value1/ticks1 * 20) % 20)
@@ -228,9 +227,7 @@ def change_spectrogram(debate, value1, value2, value_vp):
     Input('political_topics_selector', 'value')
 )
 def change_political_topics_checkboxes(political_topic):
-    print('here ' + political_topic)
     options = [{'label': item, 'value': item} for item in political_subtopics[political_topic]]
-    print(options)
     return options, political_subtopics[political_topic]
 
 @app.callback(
@@ -242,7 +239,6 @@ def change_political_topics_checkboxes(political_topic):
 def change_google_trends_graph(topic, selected_subtopics, month_value):
     if not all(item in political_subtopics[topic] for item in selected_subtopics):
         selected_subtopics = political_subtopics[topic]
-    print(topic, selected_subtopics)
     return handle_google_trends_event(topic, selected_subtopics, month_value)
 
 if __name__ == '__main__':
