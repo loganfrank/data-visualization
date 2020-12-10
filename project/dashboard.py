@@ -126,7 +126,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div(
             id='spect_div', 
-            children=[html.Img(id="spect_cloud")], style={'display': 'inline-block', 'marginLeft': '-200px', 'size': '100%'}
+            children=[html.Img(id="spect_cloud")], style={'display': 'inline-block', 'marginLeft': '-200px'}
         ),
         html.Br(),
         html.H3('Political Topics Visualization'),

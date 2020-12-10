@@ -394,5 +394,10 @@ def handle_google_trends_event(topic, selected_subtopics, month_value):
     dataframe['total'] = dataframe.sum(axis=1)
     dataframe['total'] = dataframe['total'] / dataframe['total'].max() * 100
     dataframe = dataframe.reset_index()
-    fig = px.line(dataframe, x='index', y='total')
+    fig = px.line(dataframe, x='index', y='total', title='Google Trends Relative Interest over Week Number')
+
+    fig.update_layout(
+        xaxis_title='Relative Interest',
+        yaxis_title='Week Number in 2020',
+    )
     return fig
