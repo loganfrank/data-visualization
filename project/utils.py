@@ -191,7 +191,8 @@ def handle_debate_event(debate, time_or_topic):
 
 placeholder_wordcloud_data = {'apple' : 5}
 remove_string = ['the', 'is', 'of', 'that', 'to', 'and', 'he', 'you', 'it', 'a', 'in', 'crosstalk', 'i', 'we', 'have', 'they', 'its', 'but', 'because', 'was', 'were', 'be', 'do', 'at', 'not', 'what',
-                 'are', 'by', 'for', 'thats', 'your', 'with', 'this', 'so', 'on']
+                 'are', 'by', 'for', 'thats', 'your', 'with', 'this', 'so', 'on', 'doing', 'going', 'who', 'way', 'want', 'look', 'has', 'im', 'if', 'get', 'all', 'about', 'now', 'as', 'well', 'out',
+                 'did', 'said', 'how', 'down', 'would', 'when', 'had', 'like', 'there', 'them', 'no']
 
 def cloud(data):
     """
